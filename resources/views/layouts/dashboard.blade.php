@@ -11,7 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SmartWriter | Management Application</title>
+    <title>Qualityessays | Management Application</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -92,7 +92,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a href="index3.html" class="brand-link">
             <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                  style="opacity: .8">
-            <span class="brand-text font-weight-light">SmartWriter</span>
+            <span class="brand-text font-weight-light">Qualityessays</span>
         </a>
 
         <!-- Sidebar -->
@@ -126,14 +126,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </router-link>
                     </li>
                     @can('isAdmin')
-                        <li class="nav-item">
-                            <router-link to="/category" class="nav-link">
-                                <i class="nav-icon fas fa-th-list white"></i>
-                                <p>
-                                    Writers' Category
-                                </p>
-                            </router-link>
-                        </li>
                         <li class="nav-item">
                             <router-link to="/order" class="nav-link">
                                 <i class="nav-icon fas fa-folder-open orange"></i>
@@ -279,7 +271,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2019-{{ now()->year }} <a href="https://smartwriters.expert">smartwriters.expert</a>.</strong>All rights reserved.
+        <strong>Copyright &copy; 2019-{{ now()->year }} <a href="https://qualityessays.work">qualityessays.work</a>.</strong>All rights reserved.
     </footer>
 </div>
 <!-- ./wrapper -->

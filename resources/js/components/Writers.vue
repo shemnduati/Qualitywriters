@@ -163,10 +163,10 @@
                                         <button type="button" class="btn btn-success" @click="placeBid()"
                                                 v-if="this.ifBid == 0">
                                             <i class="fas fa-thumbs-up"></i>
-                                            Place Bid
+                                            Take order
                                         </button>
                                         <span style="color: red;"
-                                              v-if="this.ifBid > 0">You already placed a bid!!</span>
+                                              v-if="this.ifBid > 0">The order has been Taken!!</span>
                                     </div>
                                 </div>
                             </div>
@@ -212,19 +212,19 @@
             placeBid() {
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Place this bid??",
+                    text: "Take this order??",
                     //type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, place it!'
+                    confirmButtonText: 'Yes, Take it!'
                 }).then((result) => {
                     if (result.value) {
                         axios.post("api/makebid/" + this.orderId).then(() => {
                             Fire.$emit('entry');
                             Swal.fire(
-                                'Placed!',
-                                'Bid successfully placed!!',
+                                'Take!',
+                                'successful!!',
                                 'success'
                             );
                             Fire.$emit('entry');

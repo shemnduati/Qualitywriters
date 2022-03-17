@@ -80,6 +80,7 @@ Route::get('myRate/{orderId}', 'API\RatingController@getMyRate');
 
 Route::get('wallet', 'API\WalletTransactionsController@walletBalance');
 Route::get('transactions', 'API\WalletTransactionsController@showTransactions');
+Route::get('autoVerify', 'API\WalletTransactionsController@autoVefification');
 
 Route::apiResources(['bid' => 'API\BidsController']);
 

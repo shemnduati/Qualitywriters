@@ -31,7 +31,7 @@ class BidsController extends Controller
 
     public function makeBid($orderId)
     {
-        $ifBid = Bid::where('user_id', auth()->user()->id)->where('order_id', $orderId)->count();
+        $ifBid = Bid::where('order_id', $orderId)->count();
 
         if ($ifBid == 0) {
             $bid = new Bid();
@@ -41,22 +41,40 @@ class BidsController extends Controller
             $bid->status = 0;
             $bid->save();
 
+            $words = Order::where('id', $orderId)->value('pages');
             $order = Order::findOrFail($orderId);
-            $order->bids = $order->bids + 1;
+            $order->assigned_user_id = $user;
+            $order->status = 1;
+            $amount = 1;
+            $order->amount = $amount;
+            $order->total_amount = $amount * $words;
             $order->update();
+
+            $email = User::where('id', $user)->value('email');
+            $data = array(
+                'title' => $request->title,
+                'pages' => $request->pages,
+                'subject' => $request->discipline,
+                'deadline' => $request->deadline,
+                'orderNo' => $request->order_number,
+                'type' => 1,
+                'sources' => $request->sources,
+            );
+           // Mail::to($email)->send(new NewOrder($data));
+            
 
             return response(['status' => 'success'], 200);
         } else {
             return response()->json([
                 'status' => 'error',
-                'msg' => 'You already placed a bid',
+                'msg' => 'The Order has been Taken',
             ], 422);
         }
     }
 
     public function checkBid($orderId)
     {
-        return Bid::where('user_id', auth()->user()->id)->where('order_id', $orderId)->count();
+        return Bid::where('order_id', $orderId)->count();
     }
 
     /**

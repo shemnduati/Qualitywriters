@@ -29,7 +29,6 @@
                   <th>Phone No.</th>
                   <th>Role</th>
                   <th>Status</th>
-                  <th>Level</th>
                   <th>Modify</th>
                 </tr>
                  <!-- v-for="user in users" :key="user.id" -->
@@ -43,15 +42,6 @@
                     <span v-if="user.status_id == 1">Active</span>
                     <span v-if="user.status_id == 0">Pending</span>
                     <span v-if="user.status_id == 2">Suspended</span>
-                  </td>
-                  <td>
-                    <span class="badge badge-primary" v-if="user.level_id == 1">Starter</span>
-                    <span class="badge badge-warning" v-if="user.level_id == 2">Junior</span>
-                    <span class="badge badge-dark" v-if="user.level_id == 3">Senior</span>
-                    <span class="badge badge-success" v-if="user.level_id == 4">Newbie</span>
-                      <span class="badge badge-success" v-if="user.level_id == 5">Mamba</span>
-                      <span class="badge badge-success" v-if="user.level_id == 6">Special</span>
-                      <span class="badge badge-info" v-if="user.level_id == 7">Expert</span>
                   </td>
                   <td>
                       <button class="btn btn-primary btn-sm" @click="editUser(user)">
@@ -87,15 +77,15 @@
             <form @submit.prevent="editmode ? updateUserInfo() : addUser()">
               <div class="modal-body">
                 <div class="form-group">
-                  <input v-model="form.name" type="text" class="form-control" name="name"id="name" placeholder="Name" :class="{ 'is-invalid': form.errors.has('name') }">
+                  <input v-model="form.name" type="text" class="form-control" name="name" id="name" placeholder="Name" :class="{ 'is-invalid': form.errors.has('name') }">
                   <has-error :form="form" field="name"></has-error>
                 </div>
                 <div class="form-group">
-                  <input v-model="form.email" type="email" class="form-control" name="email"id="email" placeholder="Email" :class="{ 'is-invalid': form.errors.has('email') }">
+                  <input v-model="form.email" type="email" class="form-control" name="email" id="email" placeholder="Email" :class="{ 'is-invalid': form.errors.has('email') }">
                   <has-error :form="form" field="email"></has-error>
                 </div>
                 <div class="form-group">
-                  <input v-model="form.phone_number" type="number" class="form-control" name="phone_number"id="phone_number" placeholder="Phone Number" :class="{ 'is-invalid': form.errors.has('phone_number') }">
+                  <input v-model="form.phone_number" type="number" class="form-control" name="phone_number" id="phone_number" placeholder="Phone Number" :class="{ 'is-invalid': form.errors.has('phone_number') }">
                   <has-error :form="form" field="phone_number"></has-error>
                 </div>
                 <div class="form-group">
@@ -109,15 +99,6 @@
                   <has-error :form="form" field="role"></has-error>
                 </div>
                 <div class="form-group">
-                  <div v-if="writer == 1"></div>
-                  <select v-model="form.level_id" class="form-control" name="level_id" id="level_id"
-                          :class="{ 'is-invalid': form.errors.has('level_id') }">
-                      <option selected value="">--Select Level--</option>
-                      <option v-for="category in categories" :value="category.id">{{ category.title }}</option>
-                  </select>
-                  <has-error :form="form" field="level_id"></has-error>
-                </div>
-                <div class="form-group">
                   <select v-model="form.status_id" class="form-control" name="status_id" id="status_id"
                           :class="{ 'is-invalid': form.errors.has('status_id') }">
                       <option selected value="">--Select Account Status--</option>
@@ -128,7 +109,7 @@
                   <has-error :form="form" field="status_id"></has-error>
                 </div>
                 <div class="form-group">
-                  <input v-model="form.password" type="password" class="form-control" name="password"id="password" placeholder="Password" :class="{ 'is-invalid': form.errors.has('password') }">
+                  <input v-model="form.password" type="password" class="form-control" name="password" id="password" placeholder="Password" :class="{ 'is-invalid': form.errors.has('password') }">
                   <has-error :form="form" field="password"></has-error>
                 </div>
               </div>
@@ -159,7 +140,6 @@
                   phone_number: '',
                     photo:'profile.png',
                   role: '',
-                  level_id: '',
                   status_id: '',
                   email: '',
                   password: '',

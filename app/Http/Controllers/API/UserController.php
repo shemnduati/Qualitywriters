@@ -48,7 +48,6 @@ class UserController extends Controller
             'phone_number' => 'required|string|min:10',
             'role' => 'required|string',
             'status_id' => 'required|string',
-            'level_id' => 'sometimes|required',
 
         ]);
 
@@ -58,7 +57,6 @@ class UserController extends Controller
             'password' => Hash::make($request['password']),
             'phone_number'  => $request['phone_number'],
             'role' => $request['role'],
-            'level_id' => $request['level_id'],
             'status_id' => $request['status_id'],
             'photo' => $request['photo'],
         ]);

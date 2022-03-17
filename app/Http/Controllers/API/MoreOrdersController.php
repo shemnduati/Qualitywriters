@@ -234,15 +234,7 @@ class MoreOrdersController extends Controller
             if ($order->urgency == 0) {
                 $order->assigned_user_id = $request->writer;
                 $order->status = 1;
-                $level_id = User::where('id', $request->writer)->value('level_id');
-                $amount = Category::where('id', $level_id)->value('amount');
-                $order->amount = $amount;
-
-                if ($order->spacing == "single") {
-                    $order->total_amount = $amount * $order->pages * 2;
-                } elseif ($order->spacing == "double") {
-                    $order->total_amount = $amount * $order->pages;
-                }
+                
                 $order->update();
 
 

@@ -40,7 +40,6 @@
                             <thead>
                             <tr>
                                 <th>Order#</th>
-                                <th v-if="$gate.isAdmin()">Bids</th>
                                 <th>Title</th>
                                 <th>Deadline</th>
                                 <th>Level</th>
@@ -53,13 +52,6 @@
                             <tbody>
                             <tr v-for="order in orders.data" :key="order.id">
                                 <td>{{order.order_number}}</td>
-                                <td v-if="$gate.isAdmin()">
-                                    <router-link :to="{path:'/bids/'+ order.id}">
-                                        <button type="button" class="btn btn-sm btn-primary">
-                                            Bids <span class="badge badge-light">{{order.bids}}</span>
-                                        </button>
-                                    </router-link>
-                                </td>
                                 <td>{{order.title}}</td>
                                 <td>
                                     <small style="color: red;">{{order.deadline|myDatetime}}</small>
@@ -165,11 +157,13 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label>No. of Pages</label><br>
-                                        <vue-numeric-input v-model="form.pages" :min="1" :step="1"
-                                                           :class="{ 'is-invalid': form.errors.has('pages') }"
-                                                           name="pages" id="pages"></vue-numeric-input>
-                                        <has-error :form="form" field="pages"></has-error>
+                                        <label>No. of words</label><br>
+                                        <input v-model="form.words" type="number" min="1" class="form-control"
+                                               name="words"
+                                               id="words"
+                                               placeholder="Number of words"
+                                               :class="{ 'is-invalid': form.errors.has('words') }">
+                                        <has-error :form="form" field="words"></has-error>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -203,6 +197,15 @@
                                                :class="{ 'is-invalid': form.errors.has('paper_format') }">
                                         <has-error :form="form" field="paper_format"></has-error>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="Sources">N.o of sources</label>
+                                        <input v-model="form.sources" type="number" min="1" class="form-control"
+                                               name="sources"
+                                               id="sources"
+                                               placeholder="Number of  Sources"
+                                               :class="{ 'is-invalid': form.errors.has('sources') }">
+                                        <has-error :form="form" field="sources"></has-error>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -219,8 +222,8 @@
                                     <toggle-button :value="this.urgent" @change="isUrgent()"/>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group" v-if="this.urgent">
-                                        <label for="title">Amount Per Page</label>
+                                    <div class="form-group"  v-if="this.urgent">
+                                        <label for="title">Amount Per word in Ksh</label>
                                         <input v-model="form.amount" type="number" min="1" class="form-control"
                                                name="amount" id="amount"
                                                placeholder="Amount"
@@ -236,19 +239,6 @@
                                         <input type="file" multiple class="form-control-file" @change="fieldChange"
                                                id="files">
                                         <has-error :form="form" field="files"></has-error>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label>Select Category of Viewers</label>
-                                        <div class="form-check" v-for="cat in categories.data" :key="cat.id">
-                                            <input class="form-check-input" name="viewers[]" type="checkbox"
-                                                   :value="cat.title" v-model="form.viewers">
-                                            <label class="form-check-label">
-                                                {{cat.title}}
-                                            </label>
-                                        </div>
-                                        <p style="color: red;">{{this.e_viewers}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -309,7 +299,6 @@
                     urgent: 0,
                     amount: '',
                     pages: 1,
-                    viewers: [],
                     title: '',
                     order_number: '',
                     discipline: '',
@@ -319,7 +308,9 @@
                     spacing: '',
                     paper_format: '',
                     description: '',
-                    writer: ''
+                    writer: '',
+                    sources: '',
+                    words:'',
                 })
             }
         },
@@ -443,9 +434,9 @@
                         level: 'This field is required'
                     })
                     return false;
-                } else if (!this.form.pages) {
+                } else if (!this.form.words) {
                     this.form.errors.set({
-                        pages: 'This field is required'
+                        words: 'This field is required'
                     })
                     return false;
                 } else if (!this.form.deadline) {
@@ -461,12 +452,13 @@
                         paper_format: 'This field is required'
                     })
                     return false;
+                } else if (!this.form.sources) {
+                    this.form.errors.set({
+                        sources: 'This field is required'
+                    })
+                    return false;
                 } else if (!this.form.description) {
                     this.e_description = 'This field is required';
-                    return false;
-                } else if (this.form.viewers.length == 0) {
-                    this.e_description = '';
-                    this.e_viewers = 'This field is required';
                     return false;
                 } else {
                     if (this.form.urgent == 1) {
@@ -492,14 +484,14 @@
                 this.formf.append('order_number', this.form.order_number);
                 this.formf.append('discipline', this.form.discipline);
                 this.formf.append('level', this.form.level);
-                this.formf.append('pages', this.form.pages);
+                this.formf.append('words', this.form.words);
                 this.formf.append('deadline', moment(this.form.deadline).format('YYYY-MM-DD HH:mm:ss'));
                 this.formf.append('spacing', this.form.spacing);
                 this.formf.append('paper_format', this.form.paper_format);
+                this.formf.append('sources', this.form.sources);
                 this.formf.append('description', this.form.description);
                 this.formf.append('urgent', this.form.urgent);
                 this.formf.append('amount', this.form.amount);
-                this.formf.append('viewers[]', this.form.viewers);
                 this.formf.append('writer', this.form.writer);
 
                 const config = {headers: {'Content-Type': 'multipart/form-data'}};
@@ -553,7 +545,6 @@
                 $("#writerSelect").val('');
                 this.form.reset();
                 this.attachments = [];
-                this.form.viewers = [];
                 $('#addnew').modal('show');
             },
         },

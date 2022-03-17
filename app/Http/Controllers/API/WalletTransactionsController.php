@@ -44,6 +44,90 @@ class WalletTransactionsController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+    public function autoVefification(){
+        $uploads =  Order::where('status', 3)->get();
+        return "I am here";
+        foreach ($uplaods as $upload ){
+            $orderId = $upolad['id'];
+            $updatedAt = $upolad['updated_at'];
+            $approvalTime = 10080;
+            $rangeTime = $updatedAt->diffInMinutes(Carbon::now());
+            if ($rangeTime > $approvalTime) {
+
+                $ifVerified = WalletTransaction::where('order_id', $orderId)->where('type', 0)->where('status', 0)->count();
+
+                if ($ifVerified > 0) {
+                    // Change status to completed
+                    $theOrder = Order::findOrFail($orderId);
+                    $theOrder->status = 5;
+                    $theOrder->update();
+                    return response(['status' => 'success'], 200);
+                } elseif ($ifVerified == 0) {
+                    // Change status to completed
+                    $theOrder = Order::findOrFail($orderId);
+                    $theOrder->status = 5;
+                    $theOrder->update();
+        
+                    // get order details
+                    $order = Order::where('id', $orderId)->first();
+        
+                    // Check if Writer has a wallet
+                    $ifWalletExists = Wallet::where('user_id', $order['assigned_user_id'])->count();
+        
+                    if ($ifWalletExists > 0) {
+                        // Update wallet
+                        $myWallet = Wallet::where('user_id', $order['assigned_user_id'])->first();
+                        $wallet = Wallet::findOrFail($myWallet['id']);
+                        $wallet->amount = $wallet['amount'] + $order['total_amount'];
+                        $wallet->update();
+                    } elseif ($ifWalletExists == 0) {
+                        // Create wallet as wallet does not exist
+                        $wallet = new Wallet();
+                        $wallet->user_id = $order['assigned_user_id'];
+                        $wallet->amount = $order['total_amount'];
+                        $wallet->save();
+                    }
+        
+                    $transaction = new WalletTransaction();
+                    $transaction->user_id = $order['assigned_user_id'];
+                    $transaction->type = 0;
+                    $transaction->order_id = $orderId;
+                    $transaction->order_number = $order['order_number'];
+                    $transaction->amount = $order['total_amount'];
+                    $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
+                    $transaction->save();
+        
+                    if ($order['completed_time'] > $order['deadline']) {
+                        $myWallet = Wallet::where('user_id', $order['assigned_user_id'])->first();
+                        $wallet = Wallet::findOrFail($myWallet['id']);
+                        $wallet->amount = $wallet['amount'] - (0.15 * $order['total_amount']);
+                        $wallet->update();
+        
+                        $transaction = new WalletTransaction();
+                        $transaction->user_id = $order['assigned_user_id'];
+                        $transaction->type = 1;
+                        $transaction->percentage = 15;
+                        $transaction->order_id = $orderId;
+                        $transaction->order_number = $order['order_number'];
+                        $transaction->description = "Lateness";
+                        $transaction->amount = -0.15 * $order['total_amount'];
+                        $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
+                        $transaction->save();
+        
+                        $email = User::where('id', $order['assigned_user_id'])->value('email');
+                        $data = array(
+                            'orderNo' => $order['order_number']
+                        );
+                        //Mail::to($email)->send(new AutoFined($data));
+                    }
+        
+                    return response(['status' => 'success'], 200);
+                }
+            } 
+        }
+        console.log($uplaods);
+        \Log::info("Scheduler is working fine!");
+    }
     public function isVerified($orderId)
     {
         $ifVerified = WalletTransaction::where('order_id', $orderId)->where('type', 0)->where('status', 0)->count();

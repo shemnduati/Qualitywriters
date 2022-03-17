@@ -117,7 +117,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><b>Cost Per Page</b></td>
+                                                <td><b>Cost Per word</b></td>
                                                 <td><span>Ksh. {{details.amount}}</span></td>
                                             </tr>
                                             <tr>
@@ -164,8 +164,12 @@
                                                 <td><span>{{details.viewers}}</span></td>
                                             </tr>
                                             <tr>
-                                                <td><b>No. of Pages</b></td>
-                                                <td><span>{{details.pages}}</span></td>
+                                                <td><b>No. of words</b></td>
+                                                <td><span>{{details.pages}} words</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>No. of Sources</b></td>
+                                                <td><span>{{details.sources}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td><b>Deadline</b></td>
