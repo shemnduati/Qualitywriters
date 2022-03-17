@@ -50,7 +50,7 @@ class ApproveTasks extends Command
         foreach ($uploads as $upload ){
             $orderId = $upload['id'];
             $updatedAt = $upload['updated_at'];
-            $approvalTime = 10;
+            $approvalTime = 10080;
             $rangeTime = $updatedAt->diffInMinutes(Carbon::now());
             if ($rangeTime > $approvalTime) {
 
