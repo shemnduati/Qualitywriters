@@ -118,6 +118,9 @@ class OrderController extends Controller
                 $order->discipline = $request->discipline;
                 $order->paper_format = $request->paper_format;
                 $order->spacing = $request->spacing;
+                $amount = 1;
+                $order->amount = $amount;
+                $order->total_amount = $amount * $request->words;
                 $order->save();
                 $order_id = $order->id;
                 if ($request->writer == '') {
