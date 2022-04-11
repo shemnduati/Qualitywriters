@@ -97,29 +97,7 @@ class WalletTransactionsController extends Controller
                     $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
                     $transaction->save();
         
-                    if ($order['completed_time'] > $order['deadline']) {
-                        $myWallet = Wallet::where('user_id', $order['assigned_user_id'])->first();
-                        $wallet = Wallet::findOrFail($myWallet['id']);
-                        $wallet->amount = $wallet['amount'] - (0.15 * $order['total_amount']);
-                        $wallet->update();
-        
-                        $transaction = new WalletTransaction();
-                        $transaction->user_id = $order['assigned_user_id'];
-                        $transaction->type = 1;
-                        $transaction->percentage = 15;
-                        $transaction->order_id = $orderId;
-                        $transaction->order_number = $order['order_number'];
-                        $transaction->description = "Lateness";
-                        $transaction->amount = -0.15 * $order['total_amount'];
-                        $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
-                        $transaction->save();
-        
-                        $email = User::where('id', $order['assigned_user_id'])->value('email');
-                        $data = array(
-                            'orderNo' => $order['order_number']
-                        );
-                        //Mail::to($email)->send(new AutoFined($data));
-                    }
+                    //removed autofine
         
                     return response(['status' => 'success'], 200);
                 }
@@ -172,30 +150,6 @@ class WalletTransactionsController extends Controller
             $transaction->amount = $order['total_amount'];
             $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
             $transaction->save();
-
-            if ($order['completed_time'] > $order['deadline']) {
-                $myWallet = Wallet::where('user_id', $order['assigned_user_id'])->first();
-                $wallet = Wallet::findOrFail($myWallet['id']);
-                $wallet->amount = $wallet['amount'] - (0.15 * $order['total_amount']);
-                $wallet->update();
-
-                $transaction = new WalletTransaction();
-                $transaction->user_id = $order['assigned_user_id'];
-                $transaction->type = 1;
-                $transaction->percentage = 15;
-                $transaction->order_id = $orderId;
-                $transaction->order_number = $order['order_number'];
-                $transaction->description = "Lateness";
-                $transaction->amount = -0.15 * $order['total_amount'];
-                $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
-                $transaction->save();
-
-                $email = User::where('id', $order['assigned_user_id'])->value('email');
-                $data = array(
-                    'orderNo' => $order['order_number']
-                );
-                Mail::to($email)->send(new AutoFined($data));
-            }
 
             return response(['status' => 'success'], 200);
         }

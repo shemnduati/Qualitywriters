@@ -9,6 +9,7 @@ use App\Mail\UrgentOrder;
 use App\Order;
 use App\File;
 use App\User;
+use App\Bid;
 use App\Category;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -227,7 +228,16 @@ class OrderController extends Controller
         }
         return $order;
     }
+    public function repost(Request $request,$id)
+    {
+                $order = Order::findOrFail($id);
+                $order->assigned_user_id = Null;
+                $order->status = 0;
+                $order->update();
 
+                Bid::where('order_id', $id)->delete();
+                return response(['status' => 'success'], 200);
+    }
     public function show($id)
     {
         return Order::where('id', $id)->first();

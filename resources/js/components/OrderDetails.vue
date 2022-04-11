@@ -159,10 +159,7 @@
                                                 <td><b>Discipline</b></td>
                                                 <td><span>{{details.discipline}}</span></td>
                                             </tr>
-                                            <tr>
-                                                <td><b>Viewers</b></td>
-                                                <td><span>{{details.viewers}}</span></td>
-                                            </tr>
+                                            
                                             <tr>
                                                 <td><b>No. of words</b></td>
                                                 <td><span>{{details.pages}} words</span></td>
@@ -391,9 +388,6 @@
                                         <button type="button" class="btn btn-warning btn-sm" @click="revisionModal">
                                             Revision
                                         </button>
-                                        <button type="button" class="btn btn-dark btn-sm" @click="fineModal"
-                                                v-if="$gate.isAdmin()">Fine
-                                        </button>
                                         <button type="button" class="btn btn-info btn-sm" @click="BonusModal"
                                                 v-if="$gate.isAdmin()">Bonus
                                         </button>
@@ -418,6 +412,9 @@
                                         </div>
                                         <button type="button" class="btn btn-primary btn-sm mb-2"
                                                 @click="reassignTrue()">Click to Reassign
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-sm  mb-2" @click="repost()">
+                                            RePost
                                         </button>
                                         <div class="row justify-content-center" v-if="isReassign == 1">
                                             <div class="col-sm-12">
@@ -1088,6 +1085,36 @@
                             Swal.fire(
                                 'Placed!',
                                 'Successfully verified as completed!!',
+                                'success'
+                            )
+                            Fire.$emit('entry');
+                        }).catch(error => {
+                            this.errors = error.response.data.errors;
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Error!!',
+                                text: error.response.data.msg,
+                            })
+                        });
+                    }
+                })
+            },
+             repost() {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Repost a fresh??",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Repost it!'
+                }).then((result) => {
+                    if (result.value) {
+                        axios.post("/api/repost/" + this.orderId).then(() => {
+                            Fire.$emit('entry');
+                            Swal.fire(
+                                'Reposted!',
+                                'Successfully reposted for new takes!!',
                                 'success'
                             )
                             Fire.$emit('entry');

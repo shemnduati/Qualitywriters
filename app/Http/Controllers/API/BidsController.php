@@ -31,44 +31,39 @@ class BidsController extends Controller
 
     public function makeBid($orderId)
     {
-        $ifBid = Bid::where('order_id', $orderId)->count();
-
-        if ($ifBid == 0) {
-            $bid = new Bid();
-            $bid->order_id = $orderId;
-            $user = auth()->user()->id;
-            $bid->user_id = $user;
-            $bid->status = 0;
-            $bid->save();
-
-            $words = Order::where('id', $orderId)->value('pages');
-            $order = Order::findOrFail($orderId);
-            $order->assigned_user_id = $user;
-            $order->status = 1;
-            $amount = 1;
-            $order->amount = $amount;
-            $order->total_amount = $amount * $words;
-            $order->update();
-
-            $email = User::where('id', $user)->value('email');
-            $data = array(
-                'title' => $request->title,
-                'pages' => $request->pages,
-                'subject' => $request->discipline,
-                'deadline' => $request->deadline,
-                'orderNo' => $request->order_number,
-                'type' => 1,
-                'sources' => $request->sources,
-            );
-           // Mail::to($email)->send(new NewOrder($data));
-            
-
-            return response(['status' => 'success'], 200);
-        } else {
+        $userId = auth()->user()->id;
+        $userPending = Order::where('assigned_user_id', $userId)->where('status', 1)->count();
+        
+        if($userPending > 0){
             return response()->json([
                 'status' => 'error',
-                'msg' => 'The Order has been Taken',
+                'msg' => 'You have a pending order kindly complete it first',
             ], 422);
+        }else {
+            $ifBid = Bid::where('order_id', $orderId)->count();
+            if ($ifBid == 0) {
+                $bid = new Bid();
+                $bid->order_id = $orderId;
+                $user = auth()->user()->id;
+                $bid->user_id = $user;
+                $bid->status = 0;
+                $bid->save();
+    
+                $words = Order::where('id', $orderId)->value('pages');
+                $order = Order::findOrFail($orderId);
+                $order->assigned_user_id = $user;
+                $order->status = 1;
+                $amount = 1;
+                $order->amount = $amount;
+                $order->total_amount = $amount * $words;
+                $order->update();
+                return response(['status' => 'success'], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'msg' => 'The Order has been Taken',
+                ], 422);
+            }
         }
     }
 

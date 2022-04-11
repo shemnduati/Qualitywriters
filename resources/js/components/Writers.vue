@@ -8,7 +8,7 @@
                     <div class="card-body">
                         <h3>New Orders</h3>
                         <div class="row details">
-                            <div class="col-md-6" v-for="order in orders" :key="order.id" v-if="order.viewers.includes(level)">
+                            <div class="col-md-6" v-for="order in orders" :key="order.id">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-aqua"><i class="fas fa-envelope" style="color: green;"></i></span>
                                     <div class="info-box-content">
@@ -77,7 +77,7 @@
                                                             <td><span>{{details.discipline}}</span></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>No. of Pages</td>
+                                                            <td>No. of Words</td>
                                                             <td><span>{{details.pages}}</span></td>
                                                         </tr>
                                                         <tr>

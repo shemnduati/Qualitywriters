@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'SmartWriter'),
+    'name' => env('APP_NAME', 'QualityEssays'),
 
     /*
     |--------------------------------------------------------------------------

@@ -133,6 +133,22 @@
                     <!-- ./col -->
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h4>{{dash['new']}}</h4>
+
+                                <p>New orders</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-clipboard-list white"></i>
+                            </div>
+                            <router-link to="/myorder" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h4>{{dash['active']}}</h4>

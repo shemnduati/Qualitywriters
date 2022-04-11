@@ -30,6 +30,7 @@ Route::get('myorders', 'API\OrderController@getMyOrders');
 Route::get('getUser/{orderId}', 'API\OrderController@user');
 Route::get('getAdmin', 'API\OrderController@admin');
 Route::get('getLevel', 'API\UserController@getLevel');
+Route::post('repost/{orderId}', 'API\OrderController@repost');
 
 Route::get('profile', 'API\UserController@profile');
 Route::get('values', 'API\UserController@value');
@@ -105,6 +106,7 @@ Route::get('getAdmin', 'API\OrderController@admin');
 Route::get('getMessage/{orderId}', 'API\MessangerController@getMessagesFor');
 
 Route::post('verify_task/{orderId}', 'API\WalletTransactionsController@isVerified');
+
 
 Route::get('earnings', 'API\PaymentController@index');
 Route::get('myearnings/{userId}', 'API\PaymentController@myEarnings');

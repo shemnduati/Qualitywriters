@@ -60,11 +60,13 @@ class DashboardController extends Controller
         $revision = Order::where('status', 4)->where('assigned_user_id', $id)->count();
         $active = Order::where('status', 1)->where('assigned_user_id', $id)->count();
         $edited = Order::where('status', 6)->where('assigned_user_id', $id)->count();
+        $new = Order::where('status', 0)->count();
         $data = array(
             'completed' => $completed,
             'revision' => $revision,
             'active' => $active,
-            'edited' => $edited
+            'edited' => $edited,
+            'new' => $new
         );
         return ['data' => $data];
     }
