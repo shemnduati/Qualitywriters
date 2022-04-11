@@ -376,6 +376,19 @@
                                     </div>
                                 </div>
                                 <hr>
+                                <div class="box"  v-if="$gate.isWriter()">
+                                    <div class="box-body">
+                                        <div class="alert alert-dark" role="alert">
+                                            Release This Order
+                                        </div>
+                                        
+                                            <button type="button" class="btn btn-success btn-sm  mb-2" @click="repost()">
+                                            Release Order
+                                        </button>                                        
+                                        
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="box" v-if="$gate.isAdmin() || $gate.isEditor()">
                                     <div class="box-body">
                                         <div class="alert alert-dark" role="alert">
@@ -1102,12 +1115,12 @@
              repost() {
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Repost a fresh??",
+                    text: "Release This Order??",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Repost it!'
+                    confirmButtonText: 'Yes, Release it!'
                 }).then((result) => {
                     if (result.value) {
                         axios.post("/api/repost/" + this.orderId).then(() => {
