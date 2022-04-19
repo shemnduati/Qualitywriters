@@ -38,6 +38,7 @@ let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/chat', component: require('./components/Chat.vue').default },
     { path: '/category', component: require('./components/WritersCategory.vue').default },
+    { path: '/editorCategory', component: require('./components/EditorCategory.vue').default },
     { path: '/orderdetails/:orderId', component: require('./components/OrderDetails.vue').default},
     { path: '/writerdetails/:userId', component: require('./components/WriterDetails.vue').default},
     { path: '/MyWriters', component: require('./components/MyWriters.vue').default },
