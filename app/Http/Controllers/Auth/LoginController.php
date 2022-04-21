@@ -35,8 +35,10 @@ class LoginController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'status_id' => 1])) {
             // Authentication passed...
             return redirect()->intended('/dashboard');
-        } else {
+        } else if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'status_id' => 2])){
             return redirect("/login")->with('message', 'Your account has been suspended or your approval is pending');
+        }else {
+            return redirect("/login")->with('warning', 'Invalid email or password');
         }
     }
 

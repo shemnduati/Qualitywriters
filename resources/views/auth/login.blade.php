@@ -13,11 +13,9 @@
                             @foreach (['danger', 'warning', 'success', 'info'] as $msg)
 
                                 @if(Session::has('alert-' . $msg))
-
-
-
-                                    <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
-
+                                    <p class="alert alert-{{ $msg }}">
+                                        {{ Session::get('alert-' . $msg) }} 
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
                                 @endif
 
                             @endforeach
@@ -30,6 +28,14 @@
                                     {{ Session::get('message') }}
                                     @php
                                         Session::forget('message');
+                                    @endphp
+                                </div>
+                            @endif
+                            @if(Session::has('warning'))
+                                <div class="alert alert-warning">
+                                    {{ Session::get('warning') }}
+                                    @php
+                                        Session::forget('warning');
                                     @endphp
                                 </div>
                             @endif
