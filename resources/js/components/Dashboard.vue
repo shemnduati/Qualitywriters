@@ -18,7 +18,6 @@
                         </div>
                     </div>
                     <!-- ./col -->
-
                     <div class="col-lg-3 col-6" v-if="$gate.isAdmin()">
                         <!-- small box -->
                         <div class="small-box bg-info">
@@ -79,6 +78,7 @@
                             <router-link to="/order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
                         </div>
                     </div>
+                     
                     <!-- ./col -->
                     <div class="col-lg-3 col-6" v-if="$gate.isEditor() || $gate.isAdmin()">
                         <!-- small box -->
@@ -94,7 +94,20 @@
                             <router-link to="/order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
                         </div>
                     </div>
+                    <div class="col-lg-3 col-6" v-if="$gate.isEditor()">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h4>Ksh.{{Math.trunc(walletBalance.amount)}}</h4>
 
+                                <p>My Wallet</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-wallet white"></i>
+                            </div>
+                            <router-link to="/walletTransactions" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></router-link>
+                        </div>
+                    </div>
                     <div class="col-lg-3 col-6" v-if="$gate.isAdmin()">
                         <!-- small box -->
                         <div class="small-box bg-primary">

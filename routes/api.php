@@ -87,6 +87,7 @@ Route::get('autoVerify', 'API\WalletTransactionsController@autoVefification');
 Route::apiResources(['bid' => 'API\BidsController']);
 
 Route::post('makebid/{orderId}', 'API\BidsController@makeBid');
+Route::post('takeOrder/{orderId}', 'API\BidsController@takeOrder');
 Route::get('checkbid/{orderId}', 'API\BidsController@checkBid');
 
 Route::apiResources(['Announcement' => 'API\AnnouncementController']);

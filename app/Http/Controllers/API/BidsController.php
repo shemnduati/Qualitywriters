@@ -9,6 +9,7 @@ use App\Mail\AwardedOrder;
 use App\Mail\CompletedOrder;
 use App\Order;
 use App\User;
+use App\EditorCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -52,7 +53,6 @@ class BidsController extends Controller
                 $words = Order::where('id', $orderId)->value('pages');
                 $order = Order::findOrFail($orderId);
                 $order->assigned_user_id = $user;
-                $order->status = 1;
                 $amount = 1;
                 $order->amount = $amount;
                 $order->total_amount = $amount * $words;
@@ -66,7 +66,37 @@ class BidsController extends Controller
             }
         }
     }
-
+    public function takeOrder($orderId)
+    {
+        $userId = auth()->user()->id;
+        $userPending = Order::where('editor_id', $userId)->where('status', 3)->count();
+        
+        if($userPending > 0){
+            return response()->json([
+                'status' => 'error',
+                'msg' => 'You have a pending order kindly complete it first',
+            ], 422);
+        }else {
+            $taken = Order::where('id', $orderId)->value('editor_id');
+            if ($taken == null) {
+                $user = auth()->user()->id;
+                $words = Order::where('id', $orderId)->value('pages');
+                $level = User::where('id', $user)->value('editor_level');
+                $order = Order::findOrFail($orderId);
+                $order->editor_id = $user;
+                $amount = EditorCategory::where('id', $level)->value('amount');
+                $order->amount = $amount;
+                $order->total_amount = $amount * $words/275;
+                $order->update();
+                return response(['status' => 'success'], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'msg' => 'The Order has been Taken',
+                ], 422);
+            }
+        }
+    }
     public function checkBid($orderId)
     {
         return Bid::where('order_id', $orderId)->count();

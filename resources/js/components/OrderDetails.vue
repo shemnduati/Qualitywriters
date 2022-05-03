@@ -7,6 +7,10 @@
                         <h3 class="card-title">Order Details<span class="badge badge-dark" style="margin-left: 4px;"
                                                                   v-if="details.urgency == 1">Urgent</span></h3>
                         <div class="card-tools">
+                             <button type="button"  class="btn btn-primary btn-sm" @click="takeOrder()"
+                                                    v-if="$gate.isEditor()">
+                                                Take This Order
+                                            </button>
                             <router-link :to="{path:'/revision/'+ orderId}">
                                 <button type="button" class="btn btn-danger btn-sm">
                                     <i class="fas fa-redo-alt"></i>
@@ -19,6 +23,7 @@
                                     View Disputes
                                 </button>
                             </router-link>
+                            
                             <router-link :to="{path:'/myorder'}" type="button"
                                          class="btn btn-primary btn-sm" v-if="$gate.isWriter()">
                                 <i class="fas fa-hand-o-left"></i>
@@ -1137,6 +1142,37 @@
                                 type: 'error',
                                 title: 'Error!!',
                                 text: error.response.data.msg,
+                            })
+                        });
+                    }
+                })
+            },
+            takeOrder() {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Take this order??",
+                    //type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Take it!'
+                }).then((result) => {
+                    if (result.value) {
+                        axios.post("/api/takeOrder/" + this.orderId).then(() => {
+                            Fire.$emit('entry');
+                            Swal.fire(
+                                'Take!',
+                                'successful!!',
+                                'success'
+                            );
+                            Fire.$emit('entry');
+                        }).catch(error => {
+                            this.errors = error.response.data.errors;
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Error!!',
+                                text: error.response.data.msg,
+
                             })
                         });
                     }
