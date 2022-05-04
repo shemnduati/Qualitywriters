@@ -72,6 +72,78 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-5">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Editors</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="card-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tbody><tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone No.</th>
+                  <th>level</th>
+                  <th>Assign Levels</th>
+                </tr>
+                 <!-- v-for="user in users" :key="user.id" -->
+                <tr v-for="editor in editors" :key="editor.id">
+                  <td>{{editor.id}}</td>
+                  <td>{{editor.name}}</td>
+                  <td>{{editor.email}}</td>
+                  <td>{{editor.phone}}</td>
+                  <td>
+                       <span class="badge badge-danger" v-if="editor.title == null">Not Assigned</span>
+                        <span class="badge badge-success" v-if="editor.title != null"> {{editor.title}}</span>
+                     </td>
+                  <td>
+                      <button class="btn btn-primary btn-sm" @click="assign(editor)">
+                          <i class="fa fa-edit"></i>
+                      </button>
+                  </td>
+                </tr>
+              </tbody></table>
+            </div>
+            <!-- /.box-body -->
+              <div class="card-footer">
+                  <pagination :data="editors" limit="10" @pagination-change-page="getResults"></pagination>
+              </div>
+          </div>
+          <!-- /.box -->
+        </div>
+        </div>
+         <!-- Modal -->
+      <div class="modal fade" id="Assign" tabindex="-1" role="dialog" aria-labelledby="AddNewLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="AddNewUser">Assign Editor Level</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form @submit.prevent="assignLevel">
+              <div class="modal-body">
+                <div class="form-group">
+                  <select v-model="formb.editor_level_id" class="form-control" name="editor_level_id" id="editor_level_id"
+                          :class="{ 'is-invalid': form.errors.has('editor_level_id') }">
+                      <option selected value="">--Select Level--</option>
+                      <option v-for="category in categories.data" :value="category.id" :key="category.id">{{ category.title }}</option>
+                  </select>
+                  <has-error :form="form" field="editor_level_id"></has-error>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Assign level</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -82,11 +154,16 @@
             return {
                 categories: '',
                 editMode: '',
+                editors:{},
                 form: new Form({
                     id: '',
                     title: '',
                     amount: '',
-                })
+                }),
+                formb: new Form({
+                   id: '',
+                   editor_level_id: '',
+                }),
             }
         },
         methods: {
@@ -105,6 +182,33 @@
 
                     })
             },
+            assignLevel() {
+                this.formb.put('api/assignLevel/' + this.formb.id)
+                    .then(() => {
+                        $('#Assign').modal('hide');
+                        Swal.fire({
+                            title: 'Assigned!',
+                            text: 'The Editors Assigned Level.',
+                            type: 'success'
+                        })
+                         Fire.$emit('entry');
+                        
+                    })
+                    .catch(error => {
+                        this.errors = error.response.data.errors;
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Error!!',
+                            text: error.response.data.msg,
+
+                        })
+                    })
+            },
+             assign(editor) {
+                this.formb.id = editor.id;
+              $('#Assign').modal('show');
+              this.formb.fill(editor);
+            },
             editCategory(cat) {
                 this.editMode = true;
                 $('#addnew').modal('show');
@@ -112,6 +216,9 @@
             },
             getCategories() {
                 axios.get("/api/editorCategory").then(({data}) => ([this.categories = data]));
+            },
+            getEditors(){
+                axios.get("api/editors").then(({ data }) => (this.editors = data['editors']));
             },
             addCategory() {
                 this.form.post('api/editorCategory')
@@ -143,8 +250,10 @@
         ,
         created() {
             this.getCategories();
+            this.getEditors();
             Fire.$on('entry', () => {
                 this.getCategories();
+                 this.getEditors();
             })
         }
     }

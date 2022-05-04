@@ -8,6 +8,7 @@ use App\Mail\AccountApproval;
 use App\Mail\AccountSuspension;
 use App\Mail\AwardedOrder;
 use App\Order;
+use App\EditorCategory;
 use Illuminate\Http\Request;
 // use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
@@ -93,6 +94,33 @@ class UserController extends Controller
 //        $user = User::all();
         return User::Where('role','writer')->latest()->paginate(9);
 
+    }
+    public function assignLevel(Request $request, $id)
+    {
+        $this->validate($request, [
+            'editor_level_id' => 'required',
+        ]);
+        $user = User::findOrFail($id);
+        $user->editor_level = $request->editor_level_id;
+        $user->update();
+        return response(['status' => 'success'], 200);
+    }
+    public function editors()
+    {
+        $editors = User::Where('role','editor')->get();
+        $parent = array();
+        foreach ($editors as $editor) {
+            $id = $editor->id;
+            $name = $editor->name;
+            $email = $editor->email;
+            $phone = $editor->phone_number;
+            $levelId = $editor->editor_level;
+            $title = EditorCategory::where('id',$levelId)->value('title');
+            $child = array('id'=>$id,'name'=>$name,'email'=>$email,'phone'=>$phone,'title'=>$title);
+            array_push($parent, $child);
+        }
+        return ['editors'=>$parent];
+       
     }
     public function updateProfile(Request $request)
     {

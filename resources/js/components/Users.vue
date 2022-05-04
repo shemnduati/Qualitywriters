@@ -134,6 +134,7 @@
                 users: {},
                 categories: {},
                 writer:0,
+                editor:0,
                 form: new Form ({
                   id: '',
                   name: '',
@@ -154,7 +155,7 @@
                     });
             },
             getCategories(){
-              window.axios.get('/api/category').then(({ data }) => (this.categories = data.data));
+              window.axios.get('/api/editorCategory').then(({ data }) => (this.categories = data.data));
             },
             updateUserInfo() {
               this.$Progress.start();

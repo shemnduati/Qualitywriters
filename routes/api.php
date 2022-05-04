@@ -35,6 +35,8 @@ Route::post('repost/{orderId}', 'API\OrderController@repost');
 
 Route::get('profile', 'API\UserController@profile');
 Route::get('values', 'API\UserController@value');
+Route::get('editors', 'API\UserController@editors');
+Route::put('assignLevel/{id}', 'API\UserController@assignLevel');
 Route::get('Myvalues/{userId}', 'API\UserController@Myvalue');
 Route::put('profile', 'API\UserController@updateProfile');
 Route::apiResources(['user' => 'API\UserController']);
