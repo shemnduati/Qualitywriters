@@ -94,6 +94,7 @@ Route::apiResources(['Announcement' => 'API\AnnouncementController']);
 Route::get('announce', 'API\AnnouncementController@announce');
 
 Route::get('myorders', 'API\OrderController@getMyOrders');
+Route::get('myorderse', 'API\OrderController@getMyOrdersE');
 Route::get('wrtorders/{userId}', 'API\OrderController@wrtorders');
 Route::get('unorders/{userId}', 'API\OrderController@unorders');
 Route::get('findMyOrder', 'API\OrderController@findMyOrder');

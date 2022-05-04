@@ -86,7 +86,8 @@ class BidsController extends Controller
                 $order->editor_id = $user;
                 $amount = EditorCategory::where('id', $level)->value('amount');
                 $order->amount = $amount;
-                $order->total_amount = $amount * $words/275;
+                $pages = $words/275;
+                $order->editor_total_amount = $amount * $pages;
                 $order->update();
                 return response(['status' => 'success'], 200);
             } else {

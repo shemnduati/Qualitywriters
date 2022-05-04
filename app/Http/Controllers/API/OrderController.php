@@ -47,6 +47,10 @@ class OrderController extends Controller
     {
         return Order::latest()->where('assigned_user_id', auth()->user()->id)->paginate(10);
     }
+    public function getMyOrdersE()
+    {
+        return Order::latest()->where('editor_id', auth()->user()->id)->paginate(10);
+    }
     public function wrtorders($userId)
     {
 

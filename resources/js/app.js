@@ -45,6 +45,7 @@ let routes = [
     { path: '/bids/:orderId', component: require('./components/Bids.vue').default},
     { path: '/announcement', component: require('./components/Announcement.vue').default},
     { path: '/myorder', component: require('./components/MyOrders.vue').default },
+    { path: '/myordere', component: require('./components/MyOrdersE.vue').default },
     { path: '/announcements', component: require('./components/AnnouncementView.vue').default},
     { path: '/earnings', component: require('./components/Earnings.vue').default},
     { path: '/walletTransactions', component: require('./components/WalletTransactions.vue').default },
