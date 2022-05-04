@@ -68,38 +68,64 @@ class WalletTransactionsController extends Controller
                     $theOrder->status = 5;
                     $theOrder->update();
         
-                    // get order details
-                    $order = Order::where('id', $orderId)->first();
-        
-                    // Check if Writer has a wallet
-                    $ifWalletExists = Wallet::where('user_id', $order['assigned_user_id'])->count();
-        
-                    if ($ifWalletExists > 0) {
-                        // Update wallet
-                        $myWallet = Wallet::where('user_id', $order['assigned_user_id'])->first();
-                        $wallet = Wallet::findOrFail($myWallet['id']);
-                        $wallet->amount = $wallet['amount'] + $order['total_amount'];
-                        $wallet->update();
-                    } elseif ($ifWalletExists == 0) {
-                        // Create wallet as wallet does not exist
-                        $wallet = new Wallet();
-                        $wallet->user_id = $order['assigned_user_id'];
-                        $wallet->amount = $order['total_amount'];
-                        $wallet->save();
-                    }
-        
-                    $transaction = new WalletTransaction();
-                    $transaction->user_id = $order['assigned_user_id'];
-                    $transaction->type = 0;
-                    $transaction->order_id = $orderId;
-                    $transaction->order_number = $order['order_number'];
-                    $transaction->amount = $order['total_amount'];
-                    $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
-                    $transaction->save();
-        
-                    //removed autofine
-        
-                    return response(['status' => 'success'], 200);
+                   
+                 // get order details
+            $order = Order::where('id', $orderId)->first();
+            //Check if Editor has a wallet
+            $ifWalletExists2 = Wallet::where('user_id', $order['editor_id'])->count();
+            //updating the balance of the Editor
+            if ($ifWalletExists2 > 0) {
+                // Update wallet
+                $myWallet = Wallet::where('user_id', $order['editor_id'])->first();
+                $wallet = Wallet::findOrFail($myWallet['id']);
+                $wallet->amount = $wallet['amount'] + $order['editor_total_amount'];
+                $wallet->update();
+            } elseif ($ifWalletExists2 == 0) {
+                // Create wallet as wallet does not exist
+                $wallet = new Wallet();
+                $wallet->user_id = $order['editor_id'];
+                $wallet->amount = $order['editor_total_amount'];
+                $wallet->save();
+            }
+            $transaction = new WalletTransaction();
+            $transaction->user_id = $order['editor_id'];
+            $transaction->type = 0;
+            $transaction->order_id = $orderId;
+            $transaction->order_number = $order['order_number'];
+            $transaction->amount = $order['editor_total_amount'];
+            $transaction->balance = User::find($order['editor_id'])->wallet->amount;
+            $transaction->save();
+             
+            // get order details
+            $order = Order::where('id', $orderId)->first();
+
+            // Check if Writer has a wallet
+            $ifWalletExists = Wallet::where('user_id', $order['assigned_user_id'])->count();
+            //updating the balance of the Writer
+            if ($ifWalletExists > 0) {
+                // Update wallet
+                $myWallet = Wallet::where('user_id', $order['assigned_user_id'])->first();
+                $wallet = Wallet::findOrFail($myWallet['id']);
+                $wallet->amount = $wallet['amount'] + $order['total_amount'];
+                $wallet->update();
+            } elseif ($ifWalletExists == 0) {
+                // Create wallet as wallet does not exist
+                $wallet = new Wallet();
+                $wallet->user_id = $order['assigned_user_id'];
+                $wallet->amount = $order['total_amount'];
+                $wallet->save();
+            }
+
+            $transaction = new WalletTransaction();
+            $transaction->user_id = $order['assigned_user_id'];
+            $transaction->type = 0;
+            $transaction->order_id = $orderId;
+            $transaction->order_number = $order['order_number'];
+            $transaction->amount = $order['total_amount'];
+            $transaction->balance = User::find($order['assigned_user_id'])->wallet->amount;
+            $transaction->save();
+
+            return response(['status' => 'success'], 200);
                 }
             } 
         }
