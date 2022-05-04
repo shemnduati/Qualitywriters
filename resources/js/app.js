@@ -33,6 +33,7 @@ let routes = [
     { path: '/foo', component: require('./components/ExampleComponent.vue').default },
     { path: '/order', component: require('./components/AdminOrders.vue').default },
     { path: '/writer', component: require('./components/Writers.vue').default },
+    { path: '/editor', component: require('./components/Editor.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
     { path: '/profile', component: require('./components/profile.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },

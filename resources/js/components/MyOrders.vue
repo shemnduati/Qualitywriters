@@ -9,6 +9,8 @@
                         <div class="card-tools">
                             <button class="btn btn-sm btn-dark" @click="writerSort(5)" v-if="$gate.isWriter()">Completed
                             </button>
+                            <button class="btn btn-sm btn-warning" @click="writerSort(0)" v-if="$gate.isWriter()">Pending
+                            </button>
                             <button class="btn btn-sm btn-danger" @click="writerSort(4)" v-if="$gate.isWriter()">Revision
                             </button>
                             <button class="btn btn-sm btn-info" @click="writerSort(1)" v-if="$gate.isWriter()">Assigned

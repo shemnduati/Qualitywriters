@@ -7,10 +7,6 @@
                         <h3 class="card-title">Order Details<span class="badge badge-dark" style="margin-left: 4px;"
                                                                   v-if="details.urgency == 1">Urgent</span></h3>
                         <div class="card-tools">
-                             <button type="button"  class="btn btn-primary btn-sm" @click="takeOrder()"
-                                                    v-if="$gate.isEditor()">
-                                                Take This Order
-                                            </button>
                             <router-link :to="{path:'/revision/'+ orderId}">
                                 <button type="button" class="btn btn-danger btn-sm">
                                     <i class="fas fa-redo-alt"></i>

@@ -27,6 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResources(['order' => 'API\OrderController']);
 Route::get('findOrder', 'API\OrderController@search');
 Route::get('myorders', 'API\OrderController@getMyOrders');
+Route::get('editorOrders', 'API\OrderController@editorOrders');
 Route::get('getUser/{orderId}', 'API\OrderController@user');
 Route::get('getAdmin', 'API\OrderController@admin');
 Route::get('getLevel', 'API\UserController@getLevel');
@@ -89,6 +90,7 @@ Route::apiResources(['bid' => 'API\BidsController']);
 Route::post('makebid/{orderId}', 'API\BidsController@makeBid');
 Route::post('takeOrder/{orderId}', 'API\BidsController@takeOrder');
 Route::get('checkbid/{orderId}', 'API\BidsController@checkBid');
+Route::get('editorCheckbid/{orderId}', 'API\BidsController@editorCheckBid');
 
 Route::apiResources(['Announcement' => 'API\AnnouncementController']);
 Route::get('announce', 'API\AnnouncementController@announce');

@@ -85,7 +85,6 @@ class BidsController extends Controller
                 $order = Order::findOrFail($orderId);
                 $order->editor_id = $user;
                 $amount = EditorCategory::where('id', $level)->value('amount');
-                $order->amount = $amount;
                 $pages = $words/275;
                 $order->editor_total_amount = $amount * $pages;
                 $order->update();
@@ -101,6 +100,12 @@ class BidsController extends Controller
     public function checkBid($orderId)
     {
         return Bid::where('order_id', $orderId)->count();
+    }
+
+
+    public function editorCheckBid($orderId)
+    {
+        return Order::where('id', $orderId)->value('editor_id');
     }
 
     /**

@@ -32,7 +32,10 @@ class OrderController extends Controller
             return Order::latest()->where('status', 3)->paginate(10);
         }
     }
-
+    public function editorOrders()
+    {
+        return Order::latest()->where('status', 3)->paginate(10);
+    }
     public function user($orderId)
     {
         return Order::where('id', $orderId)->value('assigned_user_id');

@@ -203,10 +203,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     @endcan
                     @can('isEditor')
                         <li class="nav-item">
-                            <router-link to="/order" class="nav-link">
-                                <i class="nav-icon fas fa-folder-open teal"></i>
+                            <router-link to="/editor" class="nav-link">
+                                <i class="nav-icon fas fa-sign-in-alt white"></i>
                                 <p>
-                                    Order
+                                    New Orders
                                 </p>
                             </router-link>
                         </li>

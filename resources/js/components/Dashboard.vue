@@ -250,9 +250,7 @@
                 }
             },
             getWalletBalance(){
-                if (this.$gate.isWriter()) {
                     axios.get('api/wallet/').then(({data}) => ([this.walletBalance = data]));
-                }
             }
         },
         created() {
